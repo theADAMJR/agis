@@ -14,7 +14,9 @@ config.json
 ```
 {
   "zones": [
-    ["example.com", "<zone_id>"],
+    ["example1.com", "<zone_id>"],
+    ["example2.com", "<zone_id>"],
+    ["example3.com", "<zone_id>"],
   ],
   "checkInterval": 30000
 }
