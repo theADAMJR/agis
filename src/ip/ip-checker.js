@@ -4,8 +4,6 @@ import ip from 'public-ip';
 import config from '../../config.json';
 
 export class IPChecker {
-  previousIP = null;
-
   constructor(cloudflare = new Cloudflare()) {
     this.cloudflare = cloudflare;
   }
@@ -19,13 +17,15 @@ export class IPChecker {
     const seconds = config.checkInterval / 1000;
     console.log(`Checking for IP updates every ${seconds}s`.blue);
 
+    this.previousIP = await ip.v4();
+
     setInterval(this.checkIP.bind(this), config.checkInterval);
   }
 
   async checkIP() {
     const newIP = await ip.v4();
-    const ipChange = this.previousIP && newIP === this.previousIP;
-  
+    const ipChange = newIP === this.previousIP;
+    
     console.log(`[IP] ${ipChange ? 'NOMINAL' : 'CHANGED'} - ${newIP}`.blue);
     if (ipChange) return;
     
