@@ -1,0 +1,26 @@
+{
+  "name": "agis",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "type": "module",
+  "scripts": {
+    "start": "node --experimental-json-modules src/app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "colors": "^1.4.0",
+    "dotenv": "^8.2.0",
+    "node-fetch": "^2.6.1",
+    "public-ip": "^4.0.3"
+  },
+  "devDependencies": {
+    "@types/colors": "^1.2.1",
+    "@types/dotenv": "^8.2.0",
+    "@types/node-fetch": "^2.5.8",
+    "@types/public-ip": "^3.1.0"
+  }
+}
