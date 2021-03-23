@@ -1,6 +1,5 @@
-import 'colors';
-import { HTTPService } from '../../services/http-service.js';
-import { Log } from '../../services/log.js';
+import { HTTPService } from '../../services/http-service';
+import { Log } from '../../services/log';
 
 export class Cloudflare extends HTTPService {
   constructor() {
@@ -18,7 +17,7 @@ export class Cloudflare extends HTTPService {
   }
 
   // https://api.cloudflare.com/#dns-records-for-a-zone-list-dns-records
-  async getRecord(zoneId, name) {
+  async getRecord(zoneId: string, name: string) {
     const records = await this.get(
       `zones/${zoneId}/dns_records?type=A&name=${name}`
     );
@@ -26,7 +25,7 @@ export class Cloudflare extends HTTPService {
   }
 
   // https://api.cloudflare.com/#dns-records-for-a-zone-update-dns-record
-  async patchRecord(zoneId, recordId, body) {
+  async patchRecord(zoneId: string, recordId: string, body: object) {
     const record = await this.patch(
       `zones/${zoneId}/dns_records/${recordId}`,
       body,

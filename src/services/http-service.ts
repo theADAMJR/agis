@@ -1,13 +1,13 @@
 import 'colors';
-import fetch from 'node-fetch';
+import fetch, { Response } from 'node-fetch';
+import { Log } from './log';
 
 export class HTTPService {
-  constructor(endpoint, headers) {
-    this.endpoint = endpoint;
-    this.headers = headers;
-  }
+  constructor(
+    private endpoint: string,
+    private headers: object) {}
 
-  async get(routes, headers = {}) {
+  public async get(routes: string, headers = {}) {
     const res = await fetch(
       `${this.endpoint}/${routes}`,
       { headers: { ...this.headers, ...headers } }
@@ -15,7 +15,7 @@ export class HTTPService {
     return await this.getResult(res);
   }
 
-  async post(routes, body, headers = {}) {
+  public async post(routes: string, body: object, headers = {}) {
     const res = await fetch(
       `${this.endpoint}/${routes}`, { 
         body: JSON.stringify(body),
@@ -26,7 +26,7 @@ export class HTTPService {
     return await this.getResult(res);
   }
 
-  async patch(routes, body, headers = {}) {
+  public async patch(routes: string, body: object, headers = {}) {
     const res = await fetch(
       `${this.endpoint}/${routes}`, { 
         body: JSON.stringify(body),
@@ -37,12 +37,12 @@ export class HTTPService {
     return await this.getResult(res);
   }
 
-  async getResult(res) {
+  private async getResult(res: Response) {
     const json = await res.json();
     if (!res.ok) {
-      Log.info(`${json.errors[0].message}`.red);
+      Log.info(`${json.errors?.[0].message ?? json.message}`.red);
       return;
     }
-    return json.result;
+    return json.result ?? json;
   }  
 }

@@ -1,15 +1,16 @@
-import 'colors';
-import { Cloudflare } from './cloudflare.js';
-import { Log } from '../../services/log.js';
+import { Cloudflare } from './cloudflare';
+import { Log } from '../../services/log';
 import ip from 'public-ip';
 import config from '../../../config.json';
 
 export class IPChecker {
-  constructor(cloudflare = new Cloudflare()) {
-    this.cloudflare = cloudflare;
-  }
+  private previousIP: string = '';
 
-  async start() {
+  constructor(
+    private cloudflare = new Cloudflare(),
+  ) {}
+
+  public async start() {
     const status = await this.cloudflare.checkToken();
     if (status !== 'active') return;
 
@@ -23,7 +24,7 @@ export class IPChecker {
     setInterval(this.checkIP.bind(this), config.checkInterval);
   }
 
-  async checkIP() {
+  public async checkIP() {
     const newIP = await ip.v4();
     const ipChange = newIP === this.previousIP;
     
@@ -31,10 +32,10 @@ export class IPChecker {
     if (ipChange) return;
     
     this.previousIP = newIP;
-    await this.#updateDNS();
+    await this.updateDNS();
   }
 
-  async #updateDNS() {  
+  private async updateDNS() {  
     Log.info(`Updating DNS records for ${config.zones.length} zones`.blue);
   
     for (const { 0: name, 1: zoneId } of config.zones) {

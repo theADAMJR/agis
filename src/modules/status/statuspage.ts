@@ -11,7 +11,7 @@ export class Statuspage extends HTTPService {
   }
 
   // https://developer.statuspage.io/#operation/postPagesPageIdIncidents
-  async createIncident(name, status, body) {
+  public async createIncident(name: string, status: StatusType, body: string) {
     await this.post(`pages/${this.pageId}/incidents`, {
       'incident[name]': `[Automated] - ${name}`,
       'incident[status]': status,
@@ -20,7 +20,7 @@ export class Statuspage extends HTTPService {
   }
 
   // https://developer.statuspage.io/#operation/postPagesPageIdIncidents
-  async resolveIncident(id) {
+  public async resolveIncident(id: string) {
     await this.patch(`pages/${this.pageId}/incidents/${id}`, {
       'incident[name]': `[Automated] - ${name}`,
       'incident[status]': status,
@@ -29,24 +29,24 @@ export class Statuspage extends HTTPService {
   }
 }
 
-  
+type StatusType = 'investigating' | 'identified' | 'monitoring' | 'resolved' | 'scheduled' | 'in_progress' | 'verifying' | 'completed';
 
   /**
    * curl https://api.statuspage.io/v1/pages/{page_id}/incidents \
-      -H "Authorization: OAuth your-api-key-goes-here" \
+      -H 'Authorization: OAuth your-api-key-goes-here' \
       -X POST \
-      -d "incident[name]=string" \
-      -d "incident[status]=string" \
-      -d "incident[body]=string"
+      -d 'incident[name]=string' \
+      -d 'incident[status]=string' \
+      -d 'incident[body]=string'
    */
 
 /*
 curl -X POST https://api.statuspage.io/v1/example \
-  -d "incident[name]=test incident" \
-  -d "incident[components][]=8kbf7d35c070" \
-  -d "incident[components][]=vtnh60py4yd7"
+  -d 'incident[name]=test incident' \
+  -d 'incident[components][]=8kbf7d35c070' \
+  -d 'incident[components][]=vtnh60py4yd7'
 
-curl -H "Authorization: OAuth 89a229ce1a8dbcf9ff30430fbe35eb4c0426574bca932061892cefd2138aa4b1" \
+curl -H 'Authorization: OAuth 89a229ce1a8dbcf9ff30430fbe35eb4c0426574bca932061892cefd2138aa4b1' \
   /pages/gytm4qzbx9t6.json
   
 */
