@@ -13,13 +13,18 @@ STATUSPAGE_TOKEN=""
 ```
 
 config.json
-```
-{
-  "zones": [
-    ["example1.com", "<zone_id>"],
-    ["example2.com", "<zone_id>"],
-    ["example3.com", "<zone_id>"],
-  ],
-  "checkInterval": 30000
+```{
+  "cloudflare": {
+    "zones": [
+      ["example.com", "cloudflare-zone-id"]
+    ],
+    "checkInterval": 30000
+  },
+  "statuspage": {
+    "metrics": [
+      ["metric_id", "https://example.com/api"]
+    ],
+    "metricsInterval": 60000
+  }
 }
 ```

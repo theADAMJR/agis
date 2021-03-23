@@ -7,7 +7,7 @@ export class HTTPService {
     private endpoint: string,
     private headers: object) {}
 
-  public async get(routes: string, headers = {}) {
+  protected async get(routes: string, headers = {}) {
     const res = await fetch(
       `${this.endpoint}/${routes}`,
       { headers: { ...this.headers, ...headers } }
@@ -15,7 +15,7 @@ export class HTTPService {
     return await this.getResult(res);
   }
 
-  public async post(routes: string, body: object, headers = {}) {
+  protected async post(routes: string, body: object, headers = {}) {
     const res = await fetch(
       `${this.endpoint}/${routes}`, { 
         body: JSON.stringify(body),
@@ -26,7 +26,7 @@ export class HTTPService {
     return await this.getResult(res);
   }
 
-  public async patch(routes: string, body: object, headers = {}) {
+  protected async patch(routes: string, body: object, headers = {}) {
     const res = await fetch(
       `${this.endpoint}/${routes}`, { 
         body: JSON.stringify(body),
@@ -37,11 +37,18 @@ export class HTTPService {
     return await this.getResult(res);
   }
 
+  public async ping(url: string) {
+    const before = new Date();
+    await fetch(url);
+    const after = new Date();
+    return after.getTime() - before.getTime();
+  }
+
   private async getResult(res: Response) {
     const json = await res.json();
     if (!res.ok) {
       Log.info(`${json.errors?.[0].message ?? json.message}`.red);
-      return;
+      return res;
     }
     return json.result ?? json;
   }  

@@ -4,7 +4,7 @@ import ip from 'public-ip';
 import config from '../../../config.json';
 
 export class IPChecker {
-  private previousIP: string = '';
+  private previousIP = '';
 
   constructor(
     private cloudflare = new Cloudflare(),
@@ -16,12 +16,12 @@ export class IPChecker {
 
     Log.info(`Cloudflare Token is active`.green);
 
-    const seconds = config.checkInterval / 1000;
+    const seconds = config.cloudflare.checkInterval / 1000;
     Log.info(`Checking for IP updates every ${seconds}s`.blue);
 
     this.previousIP = await ip.v4();
 
-    setInterval(this.checkIP.bind(this), config.checkInterval);
+    setInterval(this.checkIP.bind(this), config.cloudflare.checkInterval);
   }
 
   public async checkIP() {
@@ -36,9 +36,9 @@ export class IPChecker {
   }
 
   private async updateDNS() {  
-    Log.info(`Updating DNS records for ${config.zones.length} zones`.blue);
+    Log.info(`Updating DNS records for ${config.cloudflare.zones.length} zones`.blue);
   
-    for (const { 0: name, 1: zoneId } of config.zones) {
+    for (const [name, zoneId] of config.cloudflare.zones) {
       const { id } = await this.cloudflare.getRecord(zoneId, name);
   
       await this.cloudflare.patchRecord(zoneId, id, {
