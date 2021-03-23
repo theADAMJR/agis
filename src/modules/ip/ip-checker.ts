@@ -2,6 +2,7 @@ import { Cloudflare } from './cloudflare';
 import { Log } from '../../services/log';
 import ip from 'public-ip';
 import config from '../../../config.json';
+import { Emitter } from '../../services/emitter';
 
 export class IPChecker {
   private previousIP = '';
@@ -26,10 +27,12 @@ export class IPChecker {
 
   public async checkIP() {
     const newIP = await ip.v4();
-    const ipChange = newIP === this.previousIP;
+    const sameIP = newIP === this.previousIP;
     
-    Log.info(`[IP] ${ipChange ? 'NOMINAL' : 'CHANGED'} - ${newIP}`.blue);
-    if (ipChange) return;
+    Log.info(`[IP] ${sameIP ? 'NOMINAL' : 'CHANGED'} - ${newIP}`.blue);
+    if (sameIP) return;
+
+    Emitter.emit('IP_CHANGE');
     
     this.previousIP = newIP;
     await this.updateDNS();

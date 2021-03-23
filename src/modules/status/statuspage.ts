@@ -1,13 +1,14 @@
 import { Log } from '../../services/log';
 import { HTTPService } from '../../services/http-service';
+import config from '../../../config.json';
 
 export class Statuspage extends HTTPService {
-  currentIncidentId = '';
   pageId = process.env.STATUSPAGE_PAGE_ID;
 
   constructor() {
-    super(`https://api.statuspage.io/v1`, {
+    super(config.statuspage.endpoint, {
       'Authorization': `OAuth ${process.env.STATUSPAGE_TOKEN}`,
+      'Content-Type': 'application/json',
     });
   }
 
@@ -18,9 +19,9 @@ export class Statuspage extends HTTPService {
       'incident[status]': status,
       'incident[body]': `${body}\nThis message is automated.`,
     });
-    this.currentIncidentId = result.id;
-
     Log.info(`Created incident - ${result.shortlink}`.blue);
+
+    return result;
   }
 
   // https://developer.statuspage.io/#operation/patchPagesPageIdIncidentsIncidentId
@@ -35,19 +36,15 @@ export class Statuspage extends HTTPService {
 
   // https://developer.statuspage.io/#tag/metrics
   public async postMetrics(metric_id: string, value: number) {
-    const unixTimestamp = new Date().getTime() / 1000;
-    const result = await super.post(`pages/${this.pageId}/metrics/data`, {
+    const unixTimestamp = new Date().getTime() / 1000;    
+    await super.post(`pages/${this.pageId}/metrics/data`, {
       data: {
         [metric_id]: [
           { timestamp: unixTimestamp, value },
         ],
       },
     });
-    Log.info(`Sent Metrics - ${value} - ${result.metric_id}`.blue);
-  }
-
-  public async getMetrics(): Promise<any[]> {
-    return await super.get(`pages/${this.pageId}/metrics`);
+    Log.info(`Sent Metrics - ${value} - ${metric_id}`.blue);
   }
 }
 

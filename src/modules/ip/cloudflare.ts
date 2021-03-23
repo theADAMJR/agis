@@ -1,9 +1,10 @@
 import { HTTPService } from '../../services/http-service';
 import { Log } from '../../services/log';
+import config from '../../../config.json';
 
 export class Cloudflare extends HTTPService {
   constructor() {
-    super('https://api.cloudflare.com/client/v4', {
+    super(config.cloudflare.endpoint, {
       'Authorization': `Bearer ${process.env.CLOUDFLARE_TOKEN}`,
       'X-Auth-Email': process.env.CLOUDFLARE_EMAIL,
       'Content-Type': 'application/json',
