@@ -8,6 +8,8 @@ Auto update Cloudflare DNS A records, to the new IP, when it unexpectedly change
 ```.env
 CLOUDFLARE_EMAIL=""
 CLOUDFLARE_TOKEN=""
+STATUSPAGE_PAGE_ID=""
+STATUSPAGE_TOKEN=""
 ```
 
 config.json

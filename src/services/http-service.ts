@@ -39,7 +39,7 @@ export class HTTPService {
 
   async getResult(res) {
     const json = await res.json();
-    if (!json.success) {
+    if (!res.ok) {
       Log.info(`${json.errors[0].message}`.red);
       return;
     }
