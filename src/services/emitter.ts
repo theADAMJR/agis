@@ -1,4 +1,4 @@
-import EventEmitter from 'node:events';
+import EventEmitter from 'events';
 
 export class Emitter {
   private static emitter = new EventEmitter();
