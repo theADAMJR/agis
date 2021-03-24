@@ -4,8 +4,6 @@ import { Statuspage } from './statuspage';
 import { Emitter } from '../../services/emitter';
 
 export class Metrics {
-  currentIncidentId = '';
-
   constructor(
     private statuspage = new Statuspage(),
   ) {}
@@ -17,25 +15,25 @@ export class Metrics {
     Emitter.on('IP_CHANGE', async () => {
       if (!config.statuspage.autoReport.ipChange) return;
 
-      const { id, body } = await this.statuspage.createIncident(
-        'IP Change',
-        'in_progress',
-        `A Router IP change has been detected.
-        This happens at random intervals at points in the day.
-        Websites may not work during this time.`,
-      );
-
-      const timeToResolve =  5 * 60 * 1000;
-      setTimeout(async() => {
-        await this.statuspage.updateIncident(
-          this.currentIncidentId,
-          'resolved',
-          body,
-        );
-      }, timeToResolve);
+      await this.sendIncident();
     });
 
     setInterval(this.send.bind(this), config.statuspage.metricsInterval);
+  }
+
+  private async sendIncident() {
+    const name = 'IP Change';
+    const status = 'in_progress' as const;
+    const body = `A Router IP change has been detected.
+        This happens at random intervals at points in the day.
+        Websites may not work during this time.`.trim();
+
+    const { id } = await this.statuspage.createIncident(name, status, body);
+
+    const timeToResolve = 5 * 60 * 1000;
+    setTimeout(async () => {
+      await this.statuspage.updateIncident(id, name, 'resolved', body);
+    }, timeToResolve);
   }
 
   public async send() {

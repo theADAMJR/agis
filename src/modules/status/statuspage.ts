@@ -25,8 +25,8 @@ export class Statuspage extends HTTPService {
   }
 
   // https://developer.statuspage.io/#operation/patchPagesPageIdIncidentsIncidentId
-  public async updateIncident(name: string, status: StatusType, body: string) {
-    const result = await super.patch(`pages/${this.pageId}/incidents/${this.currentIncidentId}`, {
+  public async updateIncident(id: string, name: string, status: StatusType, body: string) {
+    const result = await super.patch(`pages/${this.pageId}/incidents/${id}`, {
       'incident[name]': name,
       'incident[status]': status,
       'incident[body]': `${body}\nThis message is automated.`,
