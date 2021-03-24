@@ -15,9 +15,11 @@ export class Statuspage extends HTTPService {
   // https://developer.statuspage.io/#operation/postPagesPageIdIncidents
   public async createIncident(name: string, status: StatusType, body: string) {
     const result = await super.post(`pages/${this.pageId}/incidents`, {
-      'incident[name]': name,
-      'incident[status]': status,
-      'incident[body]': `${body}\nThis message is automated.`,
+      incident: {
+        'name': name,
+        'status': status,
+        'incident': `${body}\nThis message is automated.`,
+      },
     });
     Log.info(`Created incident - ${result.shortlink}`.blue);
 
@@ -27,9 +29,11 @@ export class Statuspage extends HTTPService {
   // https://developer.statuspage.io/#operation/patchPagesPageIdIncidentsIncidentId
   public async updateIncident(id: string, name: string, status: StatusType, body: string) {
     const result = await super.patch(`pages/${this.pageId}/incidents/${id}`, {
-      'incident[name]': name,
-      'incident[status]': status,
-      'incident[body]': `${body}\nThis message is automated.`,
+      incident: {
+        'name': name,
+        'status': status,
+        'incident': `${body}\nThis message is automated.`,
+      },
     });
     Log.info(`Updated incident - ${result.shortlink}`.blue);
   }
@@ -44,7 +48,6 @@ export class Statuspage extends HTTPService {
         ],
       },
     });
-    Log.info(`Sent Metrics - ${value} - ${metric_id}`.blue);
   }
 }
 

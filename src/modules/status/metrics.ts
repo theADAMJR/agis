@@ -8,7 +8,7 @@ export class Metrics {
     private statuspage = new Statuspage(),
   ) {}
 
-  public start() {
+  public async start() {
     const seconds = config.statuspage.metricsInterval / 1000;
     Log.info(`Sending metrics every ${seconds}s`.blue);
 
@@ -40,6 +40,8 @@ export class Metrics {
     for (const [metricId, url, name] of config.statuspage.metrics) {  
       const ms = await this.statuspage.ping(url);          
       await this.statuspage.postMetrics(metricId, ms);
+
+      Log.info(`Sent Metrics - ${ms} - ${name}`.blue);
     }
   }
 }
