@@ -31,7 +31,7 @@ config.json
   "statuspage": {
     "endpoint": "https://api.statuspage.io/v1"
     "metrics": [
-      ["metric_id", "https://example.com/api", "example"]
+      ["page_id", "metric_id", "https://example.com/api", "example"]
     ],
     "autoReport": {
       "ipChange": true

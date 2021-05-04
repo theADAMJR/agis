@@ -37,9 +37,9 @@ export class Metrics {
   }
 
   public async send() {
-    for (const [metricId, url, name] of config.statuspage.metrics) {  
+    for (const [pageId, metricId, url, name] of config.statuspage.metrics) {  
       const ms = await this.statuspage.ping(url);          
-      await this.statuspage.postMetrics(metricId, ms);
+      await this.statuspage.postMetrics(pageId, metricId, ms);
 
       Log.info(`Sent Metrics - ${ms} - ${name}`.blue);
     }

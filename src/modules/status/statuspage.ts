@@ -39,9 +39,9 @@ export class Statuspage extends HTTPService {
   }
 
   // https://developer.statuspage.io/#tag/metrics
-  public async postMetrics(metric_id: string, value: number) {
+  public async postMetrics(pageId: string, metric_id: string, value: number) {
     const unixTimestamp = new Date().getTime() / 1000;    
-    await super.post(`pages/${this.pageId}/metrics/data`, {
+    await super.post(`pages/${pageId}/metrics/data`, {
       data: {
         [metric_id]: [
           { timestamp: unixTimestamp, value },
