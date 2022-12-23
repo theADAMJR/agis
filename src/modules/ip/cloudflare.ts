@@ -1,6 +1,6 @@
 import { HTTPService } from '../../services/http-service';
 import { Log } from '../../services/log';
-import config from '../../../config.json';
+import * as config from '../../../config.json';
 
 export class Cloudflare extends HTTPService {
   constructor() {
